@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Measurement;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class MeasurementController extends Controller
 {
@@ -14,7 +15,7 @@ class MeasurementController extends Controller
      */
     public function index()
     {
-        //
+        return Measurement::whereDate('created_at', Carbon::yesterday())->get(['temperature as y', 'created_at as x']);
     }
 
     /**
