@@ -18,8 +18,9 @@ class CreateMeasurementsTable extends Migration
             $table->float('temperature');
             $table->float('humidity');
             $table->float('air_pressure');
-            $table->boolean('movement');
+            $table->integer('movement');
             $table->float('luminosity');
+            $table->float('heat_index');
             $table->timestamps();
         });
     }
