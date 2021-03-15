@@ -18,21 +18,8 @@ class MeasurementController extends Controller
         });
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return array
-     */
-    public function index(Request $request)
+    private function parseMeasurements($measurements): array
     {
-        if ($request->to == null && $request->from == null) {
-            $request->to = Carbon::now();
-            $request->from = Carbon::today();
-        }
-        $measurements = Measurement::where('created_at', '>=', $request->from)
-            ->where('created_at', '<=', $request->to)
-            ->get(['temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
-
         $temperature = $this->parse($measurements, 'created_at', "temperature");
         $movement = $this->parse($measurements, 'created_at', "movement");
         $luminosity = $this->parse($measurements, 'created_at', "luminosity");
@@ -42,17 +29,44 @@ class MeasurementController extends Controller
 
         return [$temperature, $movement, $luminosity, $air_pressure, $humidity, $heat_index];
     }
-
+//    /**
+//     * Get
+//     *
+//     * @return array
+//     */
+//    public function index(Request $request)
+//    {
+//        $measurements = Measurement::get(['temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
+//
+//        return $this->parseMeasurements($measurements);
+//    }
 
     /**
-     * Show the form for creating a new resource.
+     * Get measurements from today
      *
-     * @return \Illuminate\Http\Response
+     * @return array
      */
-    public function create()
+    public function getToday(Request $request)
     {
-        //
+        $measurements = Measurement::whereDate('created_at', Carbon::today())
+            ->get(['temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
+
+        return $this->parseMeasurements($measurements);
     }
+
+    /**
+     * Get measurements from given date
+     *
+     * @return array
+     */
+    public function getDay(Request $request)
+    {
+        $measurements = Measurement::whereDate('created_at', Carbon::parse($request->date))
+            ->get(['temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
+
+        return $this->parseMeasurements($measurements);
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -67,27 +81,6 @@ class MeasurementController extends Controller
         return 200;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Measurement  $measurement
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Measurement $measurement)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Measurement  $measurement
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Measurement $measurement)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
