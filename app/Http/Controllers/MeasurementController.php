@@ -61,7 +61,7 @@ class MeasurementController extends Controller
      */
     public function getDay(Request $request)
     {
-        $measurements = Measurement::whereDate('created_at', Carbon::parse($request->date))
+        $measurements = Measurement::whereDate('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
             ->get(['temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
 
         return $this->parseMeasurements($measurements);
