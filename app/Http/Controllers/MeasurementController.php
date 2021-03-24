@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewMeasurementStored;
 use App\Models\Measurement;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -61,10 +62,13 @@ class MeasurementController extends Controller
      */
     public function getDay(Request $request): array
     {
+
         $measurements = Measurement::whereDate('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
             ->get(['temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
 
-        return $this->parseMeasurements($measurements);
+        $measurements = $this->parseMeasurements($measurements);
+
+        return $measurements;
     }
 
     public function getMonth(Request $request): array
@@ -92,7 +96,16 @@ class MeasurementController extends Controller
      */
     public function store()
     {
-        Measurement::create(request(['temperature', 'humidity', 'air_pressure', 'movement', 'luminosity', 'heat_index']));
+        $measurement = Measurement::create(request(['temperature', 'humidity', 'air_pressure', 'movement', 'luminosity', 'heat_index']));
+
+        NewMeasurementStored::dispatch([
+            ["y" => $measurement->temperature, "x" => $measurement->created_at],
+            ["y" => $measurement->movement, "x" => $measurement->created_at],
+            ["y" => $measurement->luminosity, "x" => $measurement->created_at],
+            ["y" => $measurement->air_pressure, "x" => $measurement->created_at],
+            ["y" => $measurement->humidity, "x" => $measurement->created_at],
+            ["y" => $measurement->heat_index, "x" => $measurement->created_at],
+        ]);
 
         return 200;
     }
