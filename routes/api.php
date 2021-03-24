@@ -20,8 +20,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/measurement', [MeasurementController::class, 'store']);
-//Route::get('/measurement', [MeasurementController::class, 'index']);
 Route::get('/measurement', [MeasurementController::class, 'getToday']);
 Route::get('/measurement/day', [MeasurementController::class, 'getDay']);
+Route::get('/measurement/month', [MeasurementController::class, 'getMonth']);
+Route::get('/measurement/year', [MeasurementController::class, 'getYear']);
 
 

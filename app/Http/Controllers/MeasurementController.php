@@ -59,7 +59,7 @@ class MeasurementController extends Controller
      *
      * @return array
      */
-    public function getDay(Request $request)
+    public function getDay(Request $request): array
     {
         $measurements = Measurement::whereDate('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
             ->get(['temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
@@ -67,7 +67,23 @@ class MeasurementController extends Controller
         return $this->parseMeasurements($measurements);
     }
 
+    public function getMonth(Request $request): array
+    {
+        $measurements = Measurement::whereMonth('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
+            ->orderBy('created_at', 'desc')
+            ->get(['temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
 
+        return $this->parseMeasurements($measurements);
+    }
+
+    public function getYear(Request $request): array
+    {
+        $measurements = Measurement::whereYear('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
+            ->orderBy('created_at', 'desc')
+            ->get(['temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
+
+        return $this->parseMeasurements($measurements);
+    }
     /**
      * Store a newly created resource in storage.
      *
