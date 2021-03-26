@@ -15,6 +15,7 @@ class CreateMeasurementsTable extends Migration
     {
         Schema::create('measurements', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('monitor_id');
             $table->float('temperature');
             $table->float('humidity');
             $table->float('air_pressure');
@@ -22,6 +23,12 @@ class CreateMeasurementsTable extends Migration
             $table->float('luminosity');
             $table->float('heat_index');
             $table->timestamps();
+
+            $table
+                ->foreign('monitor_id')
+                ->references('id')
+                ->on('monitors')
+                ->onDelete('cascade');
         });
     }
 

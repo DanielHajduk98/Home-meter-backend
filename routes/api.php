@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MonitorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,4 +26,5 @@ Route::get('/measurement/day', [MeasurementController::class, 'getDay']);
 Route::get('/measurement/month', [MeasurementController::class, 'getMonth']);
 Route::get('/measurement/year', [MeasurementController::class, 'getYear']);
 
+Route::post("/monitor", [MonitorController::class, 'store']);
 

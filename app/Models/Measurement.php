@@ -10,6 +10,10 @@ class Measurement extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function monitor() {
+        return $this->belongsTo(Monitor::class);
+    }
 //    protected $fillable = [
 //        'temperature', "heat_index", "luminosity", 'humidity', 'measurement'
 //    ];
