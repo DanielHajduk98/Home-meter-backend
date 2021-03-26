@@ -27,4 +27,5 @@ Route::get('/measurement/month', [MeasurementController::class, 'getMonth']);
 Route::get('/measurement/year', [MeasurementController::class, 'getYear']);
 
 Route::post("/monitor", [MonitorController::class, 'store']);
+Route::post("/monitor/update", [MonitorController::class, 'update']);
 

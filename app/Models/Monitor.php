@@ -9,6 +9,8 @@ class Monitor extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function measurements() {
         return $this->hasMany(Measurement::class);
     }
