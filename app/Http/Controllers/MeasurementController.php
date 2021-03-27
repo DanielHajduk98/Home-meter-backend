@@ -51,7 +51,7 @@ class MeasurementController extends Controller
     {
         $measurements = Measurement::whereDate('created_at', Carbon::today())
             ->orderBy("created_at", "desc")
-            ->get(['temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
+            ->get(['monitor_id', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
 
         return $this->parseMeasurements($measurements);
     }
@@ -66,7 +66,7 @@ class MeasurementController extends Controller
 
         $measurements = Measurement::whereDate('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
             ->orderBy("created_at", "desc")
-            ->get(['temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
+            ->get(['monitor_id', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
 
         $measurements = $this->parseMeasurements($measurements);
 
@@ -77,7 +77,7 @@ class MeasurementController extends Controller
     {
         $measurements = Measurement::whereMonth('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
             ->orderBy('created_at', 'desc')
-            ->get(['temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
+            ->get(['monitor_id', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
 
         return $this->parseMeasurements($measurements);
     }
@@ -86,7 +86,7 @@ class MeasurementController extends Controller
     {
         $measurements = Measurement::whereYear('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
             ->orderBy('created_at', 'desc')
-            ->get(['temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
+            ->get(['monitor_id', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
 
         return $this->parseMeasurements($measurements);
     }
@@ -98,7 +98,7 @@ class MeasurementController extends Controller
      */
     public function store()
     {
-        $measurement = Measurement::create(request(['temperature', 'humidity', 'air_pressure', 'movement', 'luminosity', 'heat_index']));
+        $measurement = Measurement::create(request(['monitor_id', 'temperature', 'humidity', 'air_pressure', 'movement', 'luminosity', 'heat_index']));
 
         NewMeasurementStored::dispatch([
             ["y" => $measurement->temperature, "x" => $measurement->created_at],
