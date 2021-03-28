@@ -26,6 +26,6 @@ Route::get('/measurement/day', [MeasurementController::class, 'getDay']);
 Route::get('/measurement/month', [MeasurementController::class, 'getMonth']);
 Route::get('/measurement/year', [MeasurementController::class, 'getYear']);
 
-Route::post("/monitor", [MonitorController::class, 'store']);
+Route::post("/monitor", [MonitorController::class, 'setupDevice']);
 Route::post("/monitor/update", [MonitorController::class, 'update']);
 

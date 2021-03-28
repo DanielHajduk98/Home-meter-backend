@@ -24,7 +24,7 @@ class MeasurementFactory extends Factory
     {
         static $index = 0;
         return [
-            'monitor_id' => 1,
+            'monitor_mac' => '73:B1:1D:30:40:57',
             'temperature' => $this->faker->numberBetween(20, 30),
             'air_pressure' => $this->faker->numberBetween(990, 1020),
             'humidity' => $this->faker->numberBetween(20, 80),

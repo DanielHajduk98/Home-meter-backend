@@ -8,16 +8,25 @@ use Illuminate\Http\Request;
 class MonitorController extends Controller
 {
     /**
-     * Store a newly created resource in storage.
+     * Check if monitor is in DB. If not create new instance.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return int
      */
-    public function store(Request $request)
+    public function setupDevice(Request $request)
     {
-        $monitor = Monitor::create(request(['macAddress', 'name']));
+        $monitor_mac = Monitor::where("macAddress", "=", $request->macAddress)->get(['macAddress']);
 
-        return $monitor->id;
+        if ($monitor_mac->isEmpty()) {
+            $monitor = Monitor::create([
+                'macAddress' => $request->macAddress,
+                'name' => "",
+            ]);
+
+            return 'Monitor setup successful';
+        }
+
+        return "Monitor already in db";
     }
 
     /**

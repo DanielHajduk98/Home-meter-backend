@@ -23,7 +23,7 @@ class MonitorFactory extends Factory
     {
         return [
             'name' => $this->faker->userName,
-            'macAddress' => $this->faker->macAddress
+            'macAddress' => '73:B1:1D:30:40:57'
         ];
     }
 }

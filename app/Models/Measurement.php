@@ -12,7 +12,7 @@ class Measurement extends Model
     protected $guarded = [];
 
     public function monitor() {
-        return $this->belongsTo(Monitor::class);
+        return $this->belongsTo(Monitor::class, "macAddress");
     }
 //    protected $fillable = [
 //        'temperature', "heat_index", "luminosity", 'humidity', 'measurement'
