@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\NewMeasurementStored;
 use App\Models\Measurement;
+use App\Models\Monitor;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use PhpParser\Node\Scalar\String_;
@@ -43,17 +44,26 @@ class MeasurementController extends Controller
 //    }
 
     /**
-     * Get measurements from today
+     * Get measurements from today.
      *
      * @return array
      */
     public function getToday(Request $request)
     {
-        $measurements = Measurement::whereDate('created_at', Carbon::today())
-            ->orderBy("created_at", "desc")
-            ->get(['monitor_mac', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
+        $measurements = [];
 
-        return $this->parseMeasurements($measurements);
+        foreach (Monitor::all() as $monitor) {
+            $data = $monitor->measurements()->whereDate('created_at', Carbon::today())
+                ->orderBy('created_at', 'desc')
+                ->get();
+            $node = [
+                'data' => $this->parseMeasurements($data),
+                'label' => $monitor->name
+            ];
+            array_push($measurements, $node);
+        }
+
+        return $measurements;
     }
 
     /**
@@ -63,32 +73,59 @@ class MeasurementController extends Controller
      */
     public function getDay(Request $request): array
     {
+        $measurements = [];
 
-        $measurements = Measurement::whereDate('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
-            ->orderBy("created_at", "desc")
-            ->get(['monitor_mac', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
-
-        $measurements = $this->parseMeasurements($measurements);
+        foreach (Monitor::all() as $monitor) {
+            $data = $monitor->measurements()
+                ->whereDate('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
+                ->orderBy('created_at', 'desc')
+                ->get();
+            $node = [
+                'data' => $this->parseMeasurements($data),
+                'label' => $monitor->name
+            ];
+            array_push($measurements, $node);
+        }
 
         return $measurements;
     }
 
     public function getMonth(Request $request): array
     {
-        $measurements = Measurement::whereMonth('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
-            ->orderBy('created_at', 'desc')
-            ->get(['monitor_mac', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
+        $measurements = [];
 
-        return $this->parseMeasurements($measurements);
+        foreach (Monitor::all() as $monitor) {
+            $data = $monitor->measurements()
+                ->whereMonth('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
+                ->orderBy('created_at', 'desc')
+                ->get();
+            $node = [
+                'data' => $this->parseMeasurements($data),
+                'label' => $monitor->name
+            ];
+            array_push($measurements, $node);
+        }
+
+        return $measurements;
     }
 
     public function getYear(Request $request): array
     {
-        $measurements = Measurement::whereYear('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
-            ->orderBy('created_at', 'desc')
-            ->get(['monitor_mac', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
+        $measurements = [];
 
-        return $this->parseMeasurements($measurements);
+        foreach (Monitor::all() as $monitor) {
+            $data = $monitor->measurements()
+                ->whereYear('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
+                ->orderBy('created_at', 'desc')
+                ->get();
+            $node = [
+                'data' => $this->parseMeasurements($data),
+                'label' => $monitor->name
+            ];
+            array_push($measurements, $node);
+        }
+
+        return $measurements;
     }
     /**
      * Store a newly created resource in storage.
@@ -100,6 +137,7 @@ class MeasurementController extends Controller
     {
         $measurement = Measurement::create(request(['monitor_mac', 'temperature', 'humidity', 'air_pressure', 'movement', 'luminosity', 'heat_index']));
 
+        //TODO change event structure
         NewMeasurementStored::dispatch([
             ["y" => $measurement->temperature, "x" => $measurement->created_at],
             ["y" => $measurement->movement, "x" => $measurement->created_at],
