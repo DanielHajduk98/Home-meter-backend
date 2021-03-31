@@ -13,7 +13,7 @@ class MeasurementController extends Controller
 {
     private function parse($collection, $y) {
         return $collection->map(function ($items) use ($y) {
-            $data['x'] = $items['created_at'];
+            $data['x'] = strtotime($items['created_at']) * 1000;
             $data['y'] = $items[$y];
             return $data;
         });
@@ -25,7 +25,6 @@ class MeasurementController extends Controller
             "name" => "Temperature",
             "data" => $this->parse($measurements, "temperature")
         ];
-
         $movement = [
             "name" => "Movement",
             "data" => $this->parse($measurements, "movement")
@@ -47,19 +46,8 @@ class MeasurementController extends Controller
             "data" => $this->parse($measurements, "heat_index")
         ];
 
-        return [$temperature, $movement, $luminosity, $air_pressure, $humidity, $heat_index];
+        return [$heat_index, $temperature, $movement, $luminosity, $air_pressure, $humidity];
     }
-//    /**
-//     * Get
-//     *
-//     * @return array
-//     */
-//    public function index(Request $request)
-//    {
-//        $measurements = Measurement::get(['temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
-//
-//        return $this->parseMeasurements($measurements);
-//    }
 
     /**
      * Get measurements from today
@@ -106,7 +94,7 @@ class MeasurementController extends Controller
             ->orderBy('created_at', 'desc')
             ->get(['monitor_mac', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
 
-        return $this->parseMeasurements($measurements);
+        return $this->parseMeasurements($measurements->nth(2));
     }
     /**
      * Store a newly created resource in storage.
@@ -118,13 +106,16 @@ class MeasurementController extends Controller
     {
         $measurement = Measurement::create(request(['monitor_mac', 'temperature', 'humidity', 'air_pressure', 'movement', 'luminosity', 'heat_index']));
 
+
+        $created_at = strtotime($measurement->created_at) * 1000;
+
         NewMeasurementStored::dispatch([
-            ["y" => $measurement->temperature, "x" => $measurement->created_at],
-            ["y" => $measurement->movement, "x" => $measurement->created_at],
-            ["y" => $measurement->luminosity, "x" => $measurement->created_at],
-            ["y" => $measurement->air_pressure, "x" => $measurement->created_at],
-            ["y" => $measurement->humidity, "x" => $measurement->created_at],
-            ["y" => $measurement->heat_index, "x" => $measurement->created_at],
+            ["y" => $measurement->heat_index, "x" => $created_at],
+            ["y" => $measurement->temperature, "x" => $created_at],
+            ["y" => $measurement->movement, "x" => $created_at],
+            ["y" => $measurement->luminosity, "x" => $created_at],
+            ["y" => $measurement->air_pressure, "x" => $created_at],
+            ["y" => $measurement->humidity, "x" => $created_at],
         ]);
 
         return 200;

@@ -23,6 +23,8 @@ class MeasurementFactory extends Factory
     public function definition()
     {
         static $index = 0;
+        $today = Carbon::today();
+
         return [
             'monitor_mac' => '73:B1:1D:30:40:12',
             'temperature' => $this->faker->numberBetween(20, 30),
@@ -31,7 +33,7 @@ class MeasurementFactory extends Factory
             'luminosity' => $this->faker->numberBetween(5, 70),
             'movement' => $this->faker->numberBetween(0, 70),
             'heat_index' => $this->faker->numberBetween(20, 30),
-            'created_at' => $this->faker->date(Carbon::today()->addMinutes(15 * $index++)),
+            'created_at' => $this->faker->date($today->copy()->startOfYear()->addMinutes(15 * $index++))
         ];
     }
 }
