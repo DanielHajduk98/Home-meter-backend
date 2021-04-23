@@ -18,8 +18,7 @@ class MonitorController extends Controller
 
         if ($monitor_mac->isEmpty()) {
             $monitor = Monitor::create([
-                'mac_address' => $request->mac_address,
-                'name' => "",
+                'mac_address' => $request->mac_address
             ]);
 
             return 'Monitor setup successful';
