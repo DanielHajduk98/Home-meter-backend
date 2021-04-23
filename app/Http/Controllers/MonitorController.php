@@ -11,22 +11,19 @@ class MonitorController extends Controller
      * Check if monitor is in DB. If not create new instance.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return int
      */
     public function setupDevice(Request $request)
     {
-        $monitor_mac = Monitor::where("macAddress", "=", $request->macAddress)->get(['macAddress']);
+        $monitor_mac = Monitor::where("mac_address", "=", $request->mac_address)->get(['mac_address']);
 
         if ($monitor_mac->isEmpty()) {
             $monitor = Monitor::create([
-                'macAddress' => $request->macAddress,
+                'mac_address' => $request->mac_address,
                 'name' => "",
             ]);
 
             return 'Monitor setup successful';
         }
-
-        return "Monitor already in db";
     }
 
     /**

@@ -26,7 +26,7 @@ class CreateMeasurementsTable extends Migration
 
             $table
                 ->foreign('monitor_mac')
-                ->references('macAddress')
+                ->references('mac_address')
                 ->on('monitors')
                 ->onDelete('cascade');
         });
