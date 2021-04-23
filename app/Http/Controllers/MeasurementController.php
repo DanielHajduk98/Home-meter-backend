@@ -69,7 +69,6 @@ class MeasurementController extends Controller
      */
     public function getDay(Request $request): array
     {
-
         $measurements = Measurement::whereDate('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
             ->orderBy("created_at", "desc")
             ->get(['monitor_mac', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
@@ -100,12 +99,11 @@ class MeasurementController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return int
+     * @return string
      */
     public function store()
     {
         $measurement = Measurement::create(request(['monitor_mac', 'temperature', 'humidity', 'air_pressure', 'movement', 'luminosity', 'heat_index']));
-
 
         $created_at = strtotime($measurement->created_at) * 1000;
 
@@ -118,7 +116,7 @@ class MeasurementController extends Controller
             ["y" => $measurement->humidity, "x" => $created_at],
         ]);
 
-        return 200;
+        return "asdfasdf";
     }
 
 

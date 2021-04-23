@@ -15,7 +15,7 @@ class CreateMonitorsTable extends Migration
     {
         Schema::create('monitors', function (Blueprint $table) {
             $table->id();
-            $table->macAddress('macAddress')->nullable(false)->unique(true);
+            $table->macAddress('mac_address')->nullable(false)->unique(true);
             $table->text('name')->default("");
             $table->timestamps();
         });

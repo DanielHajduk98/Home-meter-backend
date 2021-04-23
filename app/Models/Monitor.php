@@ -13,6 +13,6 @@ class Monitor extends Model
     protected $guarded = [];
 
     public function measurements() {
-        return $this->hasMany(Measurement::class, "monitor_mac", "macAddress");
+        return $this->hasMany(Measurement::class, "monitor_mac", "mac_address");
     }
 }
