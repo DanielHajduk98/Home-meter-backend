@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Monitor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Str;
 
 class MonitorController extends Controller
 {
     /**
-     * Check if monitor is in DB. If not create new instance.
+     * Check if monitor is in DB. If not create new instance and return token.
+     * Save encrypted token in DB.
      *
      * @param  \Illuminate\Http\Request  $request
      */
@@ -17,12 +20,17 @@ class MonitorController extends Controller
         $monitor_mac = Monitor::where("mac_address", "=", $request->mac_address)->get(['mac_address']);
 
         if ($monitor_mac->isEmpty()) {
+            $token = Str::random(32);
+
             $monitor = Monitor::create([
-                'mac_address' => $request->mac_address
+                'mac_address' => $request->mac_address,
+                'token' => Crypt::encryptString($token)
             ]);
 
-            return 'Monitor setup successful';
+            return $token;
         }
+
+        return "Device already in db";
     }
 
     /**

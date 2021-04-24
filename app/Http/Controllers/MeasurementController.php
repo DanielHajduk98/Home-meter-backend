@@ -116,7 +116,7 @@ class MeasurementController extends Controller
             ["y" => $measurement->humidity, "x" => $created_at],
         ]);
 
-        return "asdfasdf";
+        return 200;
     }
 
 

@@ -22,8 +22,8 @@ class MonitorFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->userName,
-            'mac_address' => '73:B1:1D:30:40:12'
+            'mac_address' => '73:B1:1D:30:40:12',
+            'token' => 'ERvLtDpyH3oqhkgW7PLMPBfXQDAJ9IW5'
         ];
     }
 }

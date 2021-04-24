@@ -20,12 +20,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/measurement', [MeasurementController::class, 'store']);
+Route::post('/measurement', [MeasurementController::class, 'store'])->middleware('checkMonitorToken');
 Route::get('/measurement', [MeasurementController::class, 'getToday']);
 Route::get('/measurement/day', [MeasurementController::class, 'getDay']);
 Route::get('/measurement/month', [MeasurementController::class, 'getMonth']);
 Route::get('/measurement/year', [MeasurementController::class, 'getYear']);
 
 Route::post("/monitor", [MonitorController::class, 'setupDevice']);
-Route::post("/monitor/update", [MonitorController::class, 'update']);
+//Route::post("/monitor/update", [MonitorController::class, 'update']);
 
