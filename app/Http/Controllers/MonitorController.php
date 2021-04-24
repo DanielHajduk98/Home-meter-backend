@@ -27,10 +27,14 @@ class MonitorController extends Controller
                 'token' => Crypt::encryptString($token)
             ]);
 
-            return $token;
+            return response($token, 200)
+                ->header('Content-Type', 'text/plain')
+                ->header('Content-Length', '255');
         }
 
-        return "Device already in db";
+        return response('Monitor already in DB', 200)
+            ->header('Content-Type', 'text/plain')
+            ->header('Content-Length', '255');
     }
 
     /**

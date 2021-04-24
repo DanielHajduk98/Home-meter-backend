@@ -21,7 +21,9 @@ class CheckMonitorToken
         $token = Monitor::where("mac_address", "=", $request->monitor_mac)->first()->token;
 
         if ($request->input('token') !== Crypt::decryptString($token)) {
-            return response("403");
+            return response("403", 403)
+                ->header('Content-Type', 'text/plain')
+                ->header('Content-Length', '255');
         }
 
         return $next($request);
