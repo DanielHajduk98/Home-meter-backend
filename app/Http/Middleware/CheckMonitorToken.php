@@ -20,16 +20,18 @@ class CheckMonitorToken
     public function handle(Request $request, Closure $next)
     {
         if (!$request->has(['token', 'monitor_mac'])) {
-            return 400;
+            return response("Wrong parameters", 400)
+                ->header('Content-Type', 'text/plain');
         }
 
         if(!$monitor = Monitor::where("mac_address", "=", $request->monitor_mac)->first()) {
-            return 400;
+            return response("Mac address not found", 400)
+                ->header('Content-Type', 'text/plain');
         }
 
         if ($request->input('token') !== Crypt::decryptString($monitor->token)) {
-            return 403;
-        }
+            return response("Wrong token", 403)
+                ->header('Content-Type', 'text/plain');        }
 
         return $next($request);
     }
