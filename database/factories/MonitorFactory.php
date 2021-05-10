@@ -22,7 +22,7 @@ class MonitorFactory extends Factory
     public function definition()
     {
         return [
-            'mac_address' => '73:B1:1D:30:40:12',
+            'mac_address' => 'C8:2B:96:1E:11:2B',
             'token' => 'ERvLtDpyH3oqhkgW7PLMPBfXQDAJ9IW5'
         ];
     }

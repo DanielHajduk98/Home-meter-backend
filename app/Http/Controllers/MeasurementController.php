@@ -42,7 +42,7 @@ class MeasurementController extends Controller
             "data" => $this->parse($measurements, "humidity")
         ];
         $heat_index = [
-            "name" => "Heat index",
+            "name" => "Heat Index",
             "data" => $this->parse($measurements, "heat_index")
         ];
 
