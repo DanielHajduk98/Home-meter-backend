@@ -31,7 +31,8 @@ class CheckMonitorToken
 
         if ($request->input('token') !== Crypt::decryptString($monitor->token)) {
             return response("Wrong token", 403)
-                ->header('Content-Type', 'text/plain');        }
+                ->header('Content-Type', 'text/plain');
+        }
 
         return $next($request);
     }

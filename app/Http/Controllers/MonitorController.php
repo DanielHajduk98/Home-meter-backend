@@ -28,13 +28,11 @@ class MonitorController extends Controller
             ]);
 
             return response($token, 200)
-                ->header('Content-Type', 'text/plain')
-                ->header('Content-Length', 215);
+                ->header('Content-Type', 'text/plain');
         }
 
         return response("Monitor already in DB", 200)
-            ->header('Content-Type', 'text/plain')
-            ->header('Content-Length', 215);
+            ->header('Content-Type', 'text/plain');
 
     }
 
