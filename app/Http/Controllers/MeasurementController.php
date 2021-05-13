@@ -57,7 +57,7 @@ class MeasurementController extends Controller
     public function getToday(Request $request)
     {
         $measurements = Measurement::whereDate('created_at', Carbon::today())
-            ->where("mac_address", "=", $request->mac_address)
+            ->where("monitor_mac", "=", $request->monitor_mac)
             ->get(['monitor_mac', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
 
         return $this->parseMeasurements($measurements);
@@ -71,7 +71,7 @@ class MeasurementController extends Controller
     public function getDay(Request $request): array
     {
         $measurements = Measurement::whereDate('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
-            ->where("mac_address", "=", $request->mac_address)
+            ->where("monitor_mac", "=", $request->monitor_mac)
             ->orderBy("created_at", "desc")
             ->get(['monitor_mac', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
 
@@ -83,7 +83,7 @@ class MeasurementController extends Controller
     public function getMonth(Request $request): array
     {
         $measurements = Measurement::whereMonth('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
-            ->where("mac_address", "=", $request->mac_address)
+            ->where("monitor_mac", "=", $request->monitor_mac)
             ->orderBy('created_at', 'desc')
             ->get(['monitor_mac', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
 
@@ -93,7 +93,7 @@ class MeasurementController extends Controller
     public function getYear(Request $request): array
     {
         $measurements = Measurement::whereYear('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
-            ->where("mac_address", "=", $request->mac_address)
+            ->where("monitor_mac", "=", $request->monitor_mac)
             ->orderBy('created_at', 'desc')
             ->get(['monitor_mac', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
 
