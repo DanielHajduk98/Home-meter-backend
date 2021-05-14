@@ -16,12 +16,13 @@ class CreateMeasurementsTable extends Migration
         Schema::create('measurements', function (Blueprint $table) {
             $table->id();
             $table->macAddress('monitor_mac');
-            $table->float('temperature');
-            $table->float('humidity');
-            $table->float('air_pressure');
-            $table->integer('movement');
-            $table->float('luminosity');
-            $table->float('heat_index');
+            $table->float('temperature')->nullable(true);
+            $table->float('humidity')->nullable(true);
+            $table->float('air_pressure')->nullable(true);
+            $table->integer('movement')->nullable(true);
+            $table->float('luminosity')->nullable(true);
+            $table->float('heat_index')->nullable(true);
+            $table->float('avg_sound')->nullable(true);
             $table->timestamps();
 
             $table

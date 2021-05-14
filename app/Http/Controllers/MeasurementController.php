@@ -45,8 +45,12 @@ class MeasurementController extends Controller
             "name" => "Heat Index",
             "data" => $this->parse($measurements, "heat_index")
         ];
+        $avg_sound = [
+            "name" => "Average Sound",
+            "data" => $this->parse($measurements, "avg_sound")
+        ];
 
-        return [$heat_index, $temperature, $movement, $luminosity, $air_pressure, $humidity];
+        return [$heat_index, $temperature, $movement, $luminosity, $air_pressure, $humidity, $avg_sound];
     }
 
     /**
@@ -58,7 +62,7 @@ class MeasurementController extends Controller
     {
         $measurements = Measurement::whereDate('created_at', Carbon::today())
             ->where("monitor_mac", "=", $request->monitor_mac)
-            ->get(['monitor_mac', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
+            ->get(['monitor_mac', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at', 'avg_sound']);
 
         return $this->parseMeasurements($measurements);
     }
@@ -73,7 +77,7 @@ class MeasurementController extends Controller
         $measurements = Measurement::whereDate('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
             ->where("monitor_mac", "=", $request->monitor_mac)
             ->orderBy("created_at", "desc")
-            ->get(['monitor_mac', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
+            ->get(['monitor_mac', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at', 'avg_sound']);
 
         $measurements = $this->parseMeasurements($measurements);
 
@@ -85,7 +89,7 @@ class MeasurementController extends Controller
         $measurements = Measurement::whereMonth('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
             ->where("monitor_mac", "=", $request->monitor_mac)
             ->orderBy('created_at', 'desc')
-            ->get(['monitor_mac', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
+            ->get(['monitor_mac', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at', 'avg_sound']);
 
         return $this->parseMeasurements($measurements);
     }
@@ -95,7 +99,7 @@ class MeasurementController extends Controller
         $measurements = Measurement::whereYear('created_at', Carbon::createFromIsoFormat('YYYY-MM-DD' , $request->date))
             ->where("monitor_mac", "=", $request->monitor_mac)
             ->orderBy('created_at', 'desc')
-            ->get(['monitor_mac', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at']);
+            ->get(['monitor_mac', 'temperature', 'movement', 'luminosity', 'humidity', 'air_pressure', 'heat_index', 'created_at', 'avg_sound']);
 
         return $this->parseMeasurements($measurements->nth(2));
     }
@@ -107,7 +111,7 @@ class MeasurementController extends Controller
      */
     public function store()
     {
-        $measurement = Measurement::create(request(['monitor_mac', 'temperature', 'humidity', 'air_pressure', 'movement', 'luminosity', 'heat_index']));
+        $measurement = Measurement::create(request(['monitor_mac', 'temperature', 'humidity', 'air_pressure', 'movement', 'luminosity', 'heat_index', 'avg_sound']));
 
         $created_at = strtotime($measurement->created_at) * 1000;
 
@@ -118,6 +122,7 @@ class MeasurementController extends Controller
             ["y" => $measurement->luminosity, "x" => $created_at],
             ["y" => $measurement->air_pressure, "x" => $created_at],
             ["y" => $measurement->humidity, "x" => $created_at],
+            ["y" => $measurement->avg_sound, "x" => $created_at],
         ]);
 
         return 200;
