@@ -17,9 +17,9 @@ class MonitorController extends Controller
      */
     public function setupDevice(Request $request)
     {
-        $monitor_mac = Monitor::where("mac_address", "=", $request->mac_address)->get(['mac_address']);
+        $monitor_mac = Monitor::where("mac_address", "=", $request->mac_address)->first();
 
-        if ($monitor_mac->isEmpty()) {
+        if (empty($monitor_mac)) {
             $token = Str::random(32);
 
             $monitor = Monitor::create([
@@ -33,7 +33,6 @@ class MonitorController extends Controller
 
         return response("Monitor already in DB", 200)
             ->header('Content-Type', 'text/plain');
-
     }
 
     /**
